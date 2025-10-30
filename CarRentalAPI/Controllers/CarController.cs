@@ -2,6 +2,7 @@
 using CarRental.Data;
 using CarRental.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,11 +23,11 @@ namespace CarRentalAPI.Controllers
         public async Task<ActionResult<IEnumerable<Car>>> GetCars()
         {
             var cars = await carRepository.GetAllAsync();
-            if(!cars.Any())
+            if (!cars.Any())
             {
                 return NotFound("No cars found");
             }
-            return Ok(cars);    
+            return Ok(cars);
         }
 
         // GET api/<CarController>/5
@@ -43,20 +44,55 @@ namespace CarRentalAPI.Controllers
 
         // POST api/<CarController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Car>> PostCar(Car car)
         {
+            await carRepository.AddAsync(car);
+
+            // Return 201 Created with location header
+            return CreatedAtAction(nameof(GetCar), new { id = car.Id }, car);
         }
 
         // PUT api/<CarController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutCar(int id, Car car)
         {
+            if (id != car.Id)
+            {
+                return BadRequest("ID mismatch");
+            }
+
+
+            try
+            {
+                await carRepository.UpdateAsync(car);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await carRepository.CarExistsAsync(id))
+                {
+                    return NotFound($"Car with ID {id} not found");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         // DELETE api/<CarController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
+            var car = await carRepository.GetByIdAsync(id);
+            if (car == null)
+            {
+                return NotFound($"Car with ID {id} not found");
+            }
+
+            await carRepository.DeleteAsync(car);
+            return NoContent();
         }
     }
 }

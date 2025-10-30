@@ -3,6 +3,7 @@ using CarRentalAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using CarRentalAPI.Controllers;
+using CarRental.Data;
 
 namespace CarRentalAPI
 {
@@ -20,6 +21,8 @@ namespace CarRentalAPI
             builder.Services.AddIdentityCore<ApplicationUser>(options => { })
                 .AddRoles<Microsoft.AspNetCore.Identity.IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddScoped<ICar, CarRepository>();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -74,8 +77,6 @@ namespace CarRentalAPI
 
 
             app.MapControllers();
-
-                        app.MapCarEndpoints();
 
             app.Run();
         }
