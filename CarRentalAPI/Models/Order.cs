@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using CarRentalAPI.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 

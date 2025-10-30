@@ -1,6 +1,4 @@
 ﻿
-using CarRental.Models;
-
 namespace CarRental.Data
 {
     public interface IOrder

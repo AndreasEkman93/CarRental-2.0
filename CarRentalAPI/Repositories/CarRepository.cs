@@ -42,9 +42,52 @@ namespace CarRental.Data
             context.Entry(car).State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
-        public async Task<bool> CarExistsAsync(int id)
+        private bool CarExists(int id)
         {
-            return await context.Cars.AnyAsync(e => e.Id == id);
+            return context.Cars.Any(e => e.Id == id);
         }
     }
-}
+
+
+public static class CarEndpoints
+{
+	public static void MapCarEndpoints (this IEndpointRouteBuilder routes)
+    {
+        var group = routes.MapGroup("/api/Car").WithTags(nameof(Car));
+
+        group.MapGet("/", () =>
+        {
+            return new [] { new Car() };
+        })
+        .WithName("GetAllCars")
+        .WithOpenApi();
+
+        group.MapGet("/{id}", (int id) =>
+        {
+            //return new Car { ID = id };
+        })
+        .WithName("GetCarById")
+        .WithOpenApi();
+
+        group.MapPut("/{id}", (int id, Car input) =>
+        {
+            return TypedResults.NoContent();
+        })
+        .WithName("UpdateCar")
+        .WithOpenApi();
+
+        group.MapPost("/", (Car model) =>
+        {
+            //return TypedResults.Created($"/api/Cars/{model.ID}", model);
+        })
+        .WithName("CreateCar")
+        .WithOpenApi();
+
+        group.MapDelete("/{id}", (int id) =>
+        {
+            //return TypedResults.Ok(new Car { ID = id });
+        })
+        .WithName("DeleteCar")
+        .WithOpenApi();
+    }
+}}
