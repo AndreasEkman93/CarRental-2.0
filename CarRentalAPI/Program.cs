@@ -23,6 +23,7 @@ namespace CarRentalAPI
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddScoped<ICar, CarRepository>();
+            builder.Services.AddScoped<IOrder, OrderRepository>();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
