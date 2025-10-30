@@ -10,6 +10,5 @@ namespace CarRental.Data
         Task AddAsync(Car car);
         Task UpdateAsync(Car car);
         Task DeleteAsync(Car car);
-        Task<bool> CarExistsAsync(int id);
     }
 }

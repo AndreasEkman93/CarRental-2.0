@@ -1,5 +1,4 @@
-﻿using CarRental.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace CarRentalAPI.Data
 {
